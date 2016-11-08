@@ -1,0 +1,7 @@
+<div class="episode callout"
+    [class.success]="episode.view"
+    [class.alert]="!episode.view"
+    (click)="episode.view=!episode.view"
+>
+    {{episode.number}}
+</div>

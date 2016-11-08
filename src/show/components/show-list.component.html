@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="column">
+        <h1>
+            Shows <small>List</small>
+            <a [routerLink]="['/show', 0]" class="button success small pull-right">Add</a>
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Seasons</th>
+                    <th>Episodes</th>
+                    <th style="width:80px"></th>
+                </tr>
+            </thead>
+            <tbody *ngIf="shows">
+                <tr *ngFor="let s of shows">
+                    <td>{{s.id}}</td>
+                    <td>{{s.title}}</td>
+                    <td>{{s.seasons ? s.seasons.length : 0}}</td>
+                    <td>{{s | progress}}</td>
+                    <td>
+                        <a [routerLink]="['/show', s.id]"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+                        <a (click)="deleteShow(s.id)"><i class="fa fa-trash fa-lg"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
