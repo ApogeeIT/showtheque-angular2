@@ -6,7 +6,7 @@
   "author": "concat@apogee-it.fr",
   "keywords": ["tutorial", "formation", "Angular 2"],
   "license": "ISC",
-  "repository": "",
+  "repository": "https://github.com/ApogeeIT/showtheque-angular2.git",
   "scripts": {
     "gulp": "gulp",
     "tsc": "tsc",
