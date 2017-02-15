@@ -28,8 +28,8 @@ export class ShowListComponent implements OnInit {
 
     deleteShow(id:number) {
         this._showRepo.deleteShow(id).then(
-            ok => this._msgService.showSuccessMessage('Item deleted'),
-            ko => this._msgService.showErrorMessage('Error !')
+            () => this._msgService.showSuccessMessage('Item deleted'),
+            () => this._msgService.showErrorMessage('Error !')
         );
     }
 

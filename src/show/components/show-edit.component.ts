@@ -1,3 +1,4 @@
+import { NgForm } from '@angular/forms/src/directives';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 
@@ -20,19 +21,19 @@ export class ShowEditComponent implements OnInit {
     show: Show;
 
     constructor(private _showRepo: ShowRepository,
-                private _route:ActivatedRoute,
-                private _router: Router,
-                private _msgService: MessageService){
+        private _route: ActivatedRoute,
+        private _router: Router,
+        private _msgService: MessageService) {
 
     }
 
 
-    ngOnInit(){
-        this._route.params.forEach((params:Params) => {
+    ngOnInit() {
+        this._route.params.forEach((params: Params) => {
             let id = +params['id'];
-            if(id) {
+            if (id) {
                 this._showRepo.getShow(id).then(
-                    s => this.show=s
+                    s => this.show = s
                 );
             } else {
                 this.show = new Show();
@@ -40,18 +41,20 @@ export class ShowEditComponent implements OnInit {
         });
     }
 
-    saveShow(formShow: any) {
-        this._showRepo.saveShow(this.show).then(
-            () => {
-                this._msgService.showSuccessMessage('Saved')
-                this._router.navigate(['/shows']);
-            }, 
-            (err) => this._msgService.showErrorMessage('Error !')
-        );
+    saveShow(showForm: NgForm) {
+        if (showForm.valid) {
+            this._showRepo.saveShow(this.show).then(
+                () => {
+                    this._msgService.showSuccessMessage('Saved')
+                    this._router.navigate(['/shows']);
+                },
+                () => this._msgService.showErrorMessage('Error !')
+            );
+        }
     }
 
     addSeason() {
-        if(this.show.seasons) {
+        if (this.show.seasons) {
             this.show.seasons.push(new Season(this.show.seasons.length + 1));
         } else {
             this.show.seasons = [new Season(1)];
@@ -59,21 +62,21 @@ export class ShowEditComponent implements OnInit {
     }
 
     removeSeason() {
-        if(this.show.seasons && this.show.seasons.length) {
+        if (this.show.seasons && this.show.seasons.length) {
             this.show.seasons.pop();
         }
     }
 
-    addEpisode(season:Season){
-        if(season.episodes) {
+    addEpisode(season: Season) {
+        if (season.episodes) {
             season.episodes.push(new Episode(season.episodes.length + 1));
         } else {
             season.episodes = [new Episode(1)];
         }
     }
 
-    removeEpisode(season:Season) {
-        if(season.episodes && season.episodes.length) {
+    removeEpisode(season: Season) {
+        if (season.episodes && season.episodes.length) {
             season.episodes.pop();
         }
     }
