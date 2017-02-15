@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Show } from '../models/show';
 
 @Pipe({
-    name: 'progress'
+    name: 'staProgress'
 })
 export class ProgressPipe implements PipeTransform {
     transform(show: Show):string {

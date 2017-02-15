@@ -8,9 +8,12 @@ import { Show } from '../models/show';
 import { Season } from '../models/season';
 import { Episode } from '../models/episode';
 
+import { BaseDecorator } from '../../common/components/base-decorator.component';
+
 @Component({
-    selector: 'show-edit',
-    templateUrl: './app/show/components/show-edit.component.html'
+    moduleId: module.id,
+    selector: 'sta-show-edit',
+    templateUrl: 'show-edit.component.html'
 })
 export class ShowEditComponent implements OnInit {
 

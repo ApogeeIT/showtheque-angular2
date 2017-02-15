@@ -4,7 +4,6 @@
     </div>
 </div>
 
-
 <form *ngIf="show" name="showForm" #showForm="ngForm" (ngSubmit)="saveShow(showForm)">
 
     <div class="row">
@@ -51,7 +50,7 @@
                         <a (click)="removeEpisode(s)"><i class="fa fa-minus-square"></i></a>
                     </h4>
                     <template [ngIf]="s.episodes">
-                        <episode *ngFor="let e of s.episodes" [episode]="e"></episode>
+                        <sta-episode *ngFor="let e of s.episodes" [episode]="e"></sta-episode>
                     </template>
                 </div>
             </blockquote>
@@ -66,6 +65,5 @@
             <a class="button secondary large" routerLink="/shows">Cancel</a>
         </div>
     </div>
-
 
 </form>

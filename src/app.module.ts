@@ -11,7 +11,7 @@ import { ShowModule } from './show/show.module';
 
 import { AppComponent } from './app.component';
 
-const appRoutes: Routes = [
+let appRoutes: Routes = [
     {
         path:'',
         redirectTo:'/home',
@@ -25,4 +25,8 @@ const appRoutes: Routes = [
     providers:[MessageService],
     bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+    constructor() {
+        toastr.options.positionClass = "toast-bottom-right"; 
+    }
+}

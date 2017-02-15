@@ -4,10 +4,11 @@ import { Component, Input } from '@angular/core';
 import { Episode } from '../models/episode';
 
 @Component({
-    selector: 'episode',
-    templateUrl: './app/show/directives/episode.directive.html'
+    moduleId: module.id,
+    selector: 'sta-episode',
+    templateUrl: 'episode.directive.html'
 })
-export class EpisodeDirective {
+export class EpisodeComponent {
 
     @Input()
     episode:Episode;

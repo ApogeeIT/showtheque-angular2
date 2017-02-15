@@ -17,7 +17,7 @@
                     <th>Title</th>
                     <th>Seasons</th>
                     <th>Episodes</th>
-                    <th style="width:80px"></th>
+                    <th style="width:125px"></th>
                 </tr>
             </thead>
             <tbody *ngIf="shows">
@@ -25,10 +25,10 @@
                     <td>{{s.id}}</td>
                     <td>{{s.title}}</td>
                     <td>{{s.seasons ? s.seasons.length : 0}}</td>
-                    <td>{{s | progress}}</td>
+                    <td>{{s | staProgress}}</td>
                     <td>
-                        <a [routerLink]="['/show', s.id]"><i class="fa fa-pencil-square-o fa-lg"></i></a>
-                        <a (click)="deleteShow(s.id)"><i class="fa fa-trash fa-lg"></i></a>
+                        <a [routerLink]="['/show', s.id]" class="warning button"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+                        <a (click)="deleteShow(s.id)" class="alert button"><i class="fa fa-trash fa-lg"></i></a>
                     </td>
                 </tr>
             </tbody>

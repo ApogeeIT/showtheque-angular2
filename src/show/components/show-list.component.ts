@@ -5,9 +5,12 @@ import { MessageService } from '../../common/services/message.service';
 
 import { Show } from '../models/show';
 
+import { BaseDecorator } from '../../common/components/base-decorator.component';
+
 @Component({
-    selector: 'show-list',
-    templateUrl: './app/show/components/show-list.component.html'
+    moduleId: module.id,
+    selector: 'sta-show-list',
+    templateUrl: 'show-list.component.html'
 })
 export class ShowListComponent implements OnInit {
 

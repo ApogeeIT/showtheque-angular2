@@ -6,10 +6,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { ShowRepository } from './services/show-repository.service';
 import { ShowListComponent } from './components/show-list.component';
 import { ShowEditComponent } from './components/show-edit.component';
-import { EpisodeDirective } from './directives/episode.directive';
+import { EpisodeComponent } from './directives/episode.directive';
 import { ProgressPipe } from './pipes/progress.pipe';
 
-const showRoutes: Routes = [
+let showRoutes: Routes = [
     {
         path: 'shows',
         component: ShowListComponent
@@ -22,7 +22,7 @@ const showRoutes: Routes = [
 
 @NgModule({
     imports:[CommonModule, FormsModule, RouterModule.forChild(showRoutes)],
-    declarations:[ShowListComponent, ShowEditComponent, EpisodeDirective, ProgressPipe],
+    declarations:[ShowListComponent, ShowEditComponent, EpisodeComponent, ProgressPipe],
     providers: [ShowRepository]
 })
 export class ShowModule{}
