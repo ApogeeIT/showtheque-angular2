@@ -20,7 +20,8 @@
     "aot": "ngc -p tsconfig-aot.json ",
     "start": "concurrent \"npm run gulp\" \"npm run server\"",
     "tslint": "tslint 'src/**/*.ts'",
-    "rollup": "rollup -c rollup-config.js"
+    "rollup": "rollup -c rollup-config.js",
+    "dist":"npm run aot && npm run rollup"
   },
   "dependencies": {
     "@angular/common": "2.4.6",
