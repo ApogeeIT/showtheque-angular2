@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ShowRepository } from '../services/show-repository.service';
+import { ShowRepositoryService } from '../services/show-repository.service';
 import { MessageService } from '../../common/services/message.service';
 
 import { Show } from '../models/show';
@@ -16,7 +16,7 @@ export class ShowListComponent implements OnInit {
 
     shows: Show[];
 
-    constructor(private _showRepo: ShowRepository,
+    constructor(private _showRepo: ShowRepositoryService,
                 private _msgService: MessageService){
 
     }

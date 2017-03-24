@@ -1,9 +1,10 @@
+import { ShowRepositoryLocalService } from './services/show-repository-local.service';
+import { ShowRepositoryFirebaseService } from './services/show-repository-firebase.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
-
-import { ShowRepository } from './services/show-repository.service';
+import { ShowRepositoryService } from './services/show-repository.service';
 import { ShowListComponent } from './components/show-list.component';
 import { ShowEditComponent } from './components/show-edit.component';
 import { EpisodeComponent } from './directives/episode.directive';
@@ -21,8 +22,8 @@ let showRoutes: Routes = [
 ];
 
 @NgModule({
-    imports:[CommonModule, FormsModule, RouterModule.forChild(showRoutes)],
-    declarations:[ShowListComponent, ShowEditComponent, EpisodeComponent, ProgressPipe],
-    providers: [ShowRepository]
+    imports: [CommonModule, FormsModule, RouterModule.forChild(showRoutes)],
+    declarations: [ShowListComponent, ShowEditComponent, EpisodeComponent, ProgressPipe],
+    providers: [ ]
 })
-export class ShowModule{}
+export class ShowModule { }

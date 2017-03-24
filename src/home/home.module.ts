@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
@@ -12,7 +13,7 @@ let homeRoutes: Routes = [
 ];
 
 @NgModule({
-    imports:[CommonModule, RouterModule.forChild(homeRoutes)],
-    declarations:[HomeComponent]
+    imports: [CommonModule, FormsModule, RouterModule.forChild(homeRoutes)],
+    declarations: [HomeComponent]
 })
-export class HomeModule{}
+export class HomeModule { }

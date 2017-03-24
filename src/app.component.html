@@ -2,12 +2,13 @@
     <div id="top">
         <div id="header-right">
             <a routerLink="/home" class="button primary large">Home</a>
-            <a routerLink="/shows" class="button primary large">Shows</a>
+            <a *ngIf="user" routerLink="/shows" class="button primary large">Shows</a>
         </div>
         <div id="header-left">
             <span class="title">ShowTheque</span>
         </div>
     </div>
+    <div class="text-right" *ngIf="user"><i class="fa fa-user"></i> {{user.name || user.email}} (<a (click)="logout()">logout</a>)</div>
     <div id="content">
         <router-outlet></router-outlet>
     </div>

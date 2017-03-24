@@ -2,7 +2,7 @@ import { NgForm } from '@angular/forms/src/directives';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 
-import { ShowRepository } from '../services/show-repository.service';
+import { ShowRepositoryService } from '../services/show-repository.service';
 import { MessageService } from '../../common/services/message.service';
 
 import { Show } from '../models/show';
@@ -20,7 +20,7 @@ export class ShowEditComponent implements OnInit {
 
     show: Show;
 
-    constructor(private _showRepo: ShowRepository,
+    constructor(private _showRepo: ShowRepositoryService,
         private _route: ActivatedRoute,
         private _router: Router,
         private _msgService: MessageService) {
