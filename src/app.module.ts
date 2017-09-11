@@ -16,6 +16,7 @@ import { HomeModule } from './home/home.module';
 import { ShowModule } from './show/show.module';
 
 import { AppComponent } from './app.component';
+import { ShowRepositoryFirebaseService } from './show/services/show-repository-firebase.service';
 
 export function initAppFactory(init: InitAppService) {
     return function () {
@@ -36,11 +37,11 @@ let appRoutes: Routes = [
     declarations: [AppComponent],
     providers: [
         InitAppService,
-        //{ provide: APP_INITIALIZER, useFactory: initAppFactory, deps: [InitAppService], multi: true },
-        //{ provide: ShowRepositoryService, useClass: ShowRepositoryFirebaseService }
-        //{ provide: AuthService, useClass: AuthFirebaseService },
-        { provide: ShowRepositoryService, useClass: ShowRepositoryLocalService },
-        { provide: AuthService, useClass: AuthLocalService },
+        { provide: APP_INITIALIZER, useFactory: initAppFactory, deps: [InitAppService], multi: true },
+        { provide: ShowRepositoryService, useClass: ShowRepositoryFirebaseService },
+        { provide: AuthService, useClass: AuthFirebaseService },
+        //{ provide: ShowRepositoryService, useClass: ShowRepositoryLocalService },
+        //{ provide: AuthService, useClass: AuthLocalService },
         MessageService
     ],
     bootstrap: [AppComponent]

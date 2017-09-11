@@ -7,11 +7,9 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class AuthLocalService extends AuthService {
 
-    private _user?: User;
-
     constructor() {
         super();
-        this._isAuthenticated = new BehaviorSubject(undefined);
+        this._isAuthenticated = new Subject();
         this.localLogin();
     }
 
@@ -24,12 +22,12 @@ export class AuthLocalService extends AuthService {
 
     logout(): void {
         this._user = undefined;
-        this._isAuthenticated.next(undefined);
+        this._isAuthenticated.next(false);
     }
 
     private localLogin() {
         this._user = new User();
         this._user.name = 'local user';
-        this._isAuthenticated.next(this._user);
+        this._isAuthenticated.next(true);
     }
 }

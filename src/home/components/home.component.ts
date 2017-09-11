@@ -14,7 +14,7 @@ export class HomeComponent {
 
     constructor(private _auth: AuthService, private _router: Router) {
         this._auth.onAuthenticatedChange().subscribe(user => {
-            this.user = user;
+            this.user = this._auth.getUser();
         })
     }
 

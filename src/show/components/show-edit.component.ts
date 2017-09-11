@@ -27,10 +27,9 @@ export class ShowEditComponent implements OnInit {
 
     }
 
-
     ngOnInit() {
         this._route.params.forEach((params: Params) => {
-            let id = +params['id'];
+            let id = params['id'];
             if (id) {
                 this._showRepo.getShow(id).then(
                     s => this.show = s

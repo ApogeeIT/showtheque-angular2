@@ -13,7 +13,6 @@
         <table>
             <thead>
                 <tr>
-                    <th>Id</th>
                     <th>Title</th>
                     <th>Seasons</th>
                     <th>Episodes</th>
@@ -22,7 +21,6 @@
             </thead>
             <tbody *ngIf="shows">
                 <tr *ngFor="let s of shows">
-                    <td>{{s.id}}</td>
                     <td>{{s.title}}</td>
                     <td>{{s.seasons ? s.seasons.length : 0}}</td>
                     <td>{{s | staProgress}}</td>

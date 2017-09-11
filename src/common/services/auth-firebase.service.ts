@@ -8,17 +8,19 @@ import 'firebase';
 @Injectable()
 export class AuthFirebaseService extends AuthService {
 
-    private _user?: firebase.UserInfo;
+    private _fuser?: firebase.UserInfo;
 
     constructor() {
         super();
-        this._isAuthenticated = new BehaviorSubject(undefined);
+        this._isAuthenticated = new Subject();
+
         firebase.auth().onAuthStateChanged((user: firebase.UserInfo) => {
-            this._user = user;
+            this._fuser = user;
             if (user) {
-                this._isAuthenticated.next({ id: user.uid, name: user.displayName, email: user.email });
+                this._user = { id: user.uid, name: user.displayName, email: user.email };
+                this._isAuthenticated.next(true);
             } else {
-                this._isAuthenticated.next(undefined);
+                this._isAuthenticated.next(false);
             }
         });
     }
@@ -36,6 +38,6 @@ export class AuthFirebaseService extends AuthService {
     logout(): void {
         firebase.auth().signOut();
         this._user = undefined;
-        this._isAuthenticated.next(undefined);
+        this._isAuthenticated.next(false);
     }
 }

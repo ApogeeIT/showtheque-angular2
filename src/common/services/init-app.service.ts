@@ -6,8 +6,10 @@ export class InitAppService {
 
     public initApplication(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
+            let config = {
 
-            resolve();
+            };
+            firebase.initializeApp(config);
         });
     }
 

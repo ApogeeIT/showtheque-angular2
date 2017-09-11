@@ -1,3 +1,4 @@
+import { AuthService } from '../../common/services/auth.service';
 import { ShowRepositoryService } from './show-repository.service';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
@@ -13,52 +14,63 @@ import { Show } from '../models/show'
 @Injectable()
 export class ShowRepositoryFirebaseService extends ShowRepositoryService {
 
-    private _shows: Show[];
+    private _shows: Show[] = [];
 
-    constructor(private _http: Http) {
+    private userRef: firebase.database.Reference;
+
+    constructor(private _http: Http, private _auth: AuthService) {
         super();
+        this._auth.onAuthenticatedChange().subscribe(auth => {
+            if (auth) {
+                let user = this._auth.getUser();
+                if(user) {
+                    this.userRef = firebase.database().ref('/users/' + user.id);
+                }                
+            }
+        });
     }
 
     public getShows(): Observable<Show[]> {
-        var obs = new Observable<Show[]>((observer: Observer<Show[]>) => {
-            
-            firebase.database().ref('/shows').once('value').then(snapshot => {
-                console.log(snapshot.val())
-                observer.next(snapshot.val());
+        return new Observable<Show[]>((observer: Observer<Show[]>) => {
+            this.userRef.child('/shows').once('value').then(snapshot => {
+                this._shows = [];
+
+                snapshot.forEach(child => {
+                    this._shows.push(child.val())
+                });
+
+                observer.next(this._shows);
             }, err => {
                 observer.error(err);
             });
 
         });
-        return obs;
     }
 
-    public deleteShow(id: number): Promise<Show> {
+    public deleteShow(id: string): Promise<any> {
 
-        let promise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
 
-            this.getShows().subscribe((shows: Show[]) => {
-                let idx = shows.findIndex(s => s.id == id);
-                let show: Show; // tslint
-                if (idx >= 0) {
-                    show = shows[idx];
-                    shows.splice(idx, 1);
-                    resolve(show);
+            this.userRef.child('/shows/' + id).remove((err) => {
+                if (err) {
+                    reject(err)
                 } else {
-                    reject();
+                    let idx = this._shows.findIndex(s => s.id == id);
+                    if (idx >= 0) {
+                        this._shows.splice(idx, 1);
+                    }
+                    resolve();
                 }
-            }, err => reject(err));
+            });
 
         });
-
-        return promise;
-
     }
 
-    public getShow(id: number): Promise<Show> {
+    public getShow(id: string): Promise<Show> {
         return new Promise((resolve, reject) => {
+            console.log(id);
             this.getShows().subscribe(
-                shows => resolve(shows.find(s => s.id == id)),
+                shows => resolve(shows.find(s => s.id === id)),
                 err => reject(err))
         });
     }
@@ -66,44 +78,38 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
     public saveShow(show: Show): Promise<Show> {
         return new Promise((resolve, reject) => {
 
+            let add = false;
+            if (!show.id) {
+                add = true;
+                show.id = this.getId();
+            }
 
-        var newPostKey = firebase.database().ref().child('shows').push().key;
-        show.id = newPostKey;
-
- var updates = {};
-  updates['/shows/' + newPostKey] = show;
-firebase.database().ref().update(updates).then(ok => console.log(ok), ko => console.log(ko));
-
-
-            /*var myRef = firebase.database().ref('/shows').push();
-            var key = myRef.key
-            show.id = key;
-            myRef.push(show).then(ok => console.log(ok), ko => console.log(ko));*/
-            /*firebase.database().ref('/shows').push(show).then(ok =>{
-                resolve(show);
-            }, err => {
-                reject(err);
-            });*/
-
-resolve(show);
-            /*this.getShows().subscribe(shows => {
-
-                if (show.id) {
-                    let idx = shows.findIndex(s => s.id == show.id);
-                    shows.splice(idx, 1, show);
+            this.userRef.child('/shows/' + show.id).set(show, (err) => {
+                if (err) {
+                    reject();
                 } else {
-                    show.id = shows.reduce<any>((a, b) => { return { id: Math.max(a.id, b.id) } }, { id: 0 }).id + 1;
-                    shows.push(show);
+                    if (add) {
+                        this._shows.push(show);
+                    }
+                    resolve(show);
                 }
-                resolve(show);
-            }, err => reject(err))*/
-
+            });
         });
     }
 
     private error(error: Response) {
         console.log(error);
         return Observable.throw("Request error");
+    }
+
+    private getId(): string {
+        return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, (c: any) =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+
+    private getUserRef() {
+        return firebase.database().ref('/users/' + this._auth.login)
     }
 
 }
