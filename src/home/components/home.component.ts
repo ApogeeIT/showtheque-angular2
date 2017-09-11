@@ -18,7 +18,7 @@ export class HomeComponent {
         })
     }
 
-    loginUser({login, password}) {
+    loginUser({ login, password }: { login: string, password: string }) {
         this._auth.login(login, password);
     }
 }

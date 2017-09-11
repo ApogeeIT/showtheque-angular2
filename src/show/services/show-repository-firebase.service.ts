@@ -23,20 +23,21 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
         this._auth.onAuthenticatedChange().subscribe(auth => {
             if (auth) {
                 let user = this._auth.getUser();
-                if(user) {
+                if (user) {
                     this.userRef = firebase.database().ref('/users/' + user.id);
-                }                
+                }
             }
         });
     }
 
     public getShows(): Observable<Show[]> {
         return new Observable<Show[]>((observer: Observer<Show[]>) => {
-            this.userRef.child('/shows').once('value').then(snapshot => {
+            this.userRef.child('/shows').once('value').then((snapshot: firebase.database.DataSnapshot) => {
                 this._shows = [];
 
-                snapshot.forEach(child => {
+                snapshot.forEach((child: firebase.database.DataSnapshot) => {
                     this._shows.push(child.val())
+                    return false;
                 });
 
                 observer.next(this._shows);
@@ -104,7 +105,8 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
 
     private getId(): string {
         return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, (c: any) =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4)
+            .toString(16)
         );
     }
 

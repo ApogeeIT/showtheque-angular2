@@ -10,6 +10,7 @@ export class InitAppService {
 
             };
             firebase.initializeApp(config);
+            resolve();
         });
     }
 

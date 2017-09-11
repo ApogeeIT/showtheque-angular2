@@ -41,7 +41,7 @@ export class ShowRepositoryLocalService extends ShowRepositoryService {
 
     }
 
-    public deleteShow(id: number): Promise<Show> {
+    public deleteShow(id: number): Promise<any> {
 
         let promise = new Promise((resolve, reject) => {
 

@@ -8,7 +8,11 @@
     "experimentalDecorators": true,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": false,
-    "outDir": "app"
+    "outDir": "app",
+    "lib": [
+        "es6",
+        "dom"
+    ]
   },
 
   "files": [

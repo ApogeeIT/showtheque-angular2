@@ -49,9 +49,9 @@
                         <a (click)="addEpisode(s)"><i class="fa fa-plus-square"></i></a>
                         <a (click)="removeEpisode(s)"><i class="fa fa-minus-square"></i></a>
                     </h4>
-                    <template [ngIf]="s.episodes">
+                    <ng-container *ngIf="s.episodes">
                         <sta-episode *ngFor="let e of s.episodes" [episode]="e"></sta-episode>
-                    </template>
+                    </ng-container>
                 </div>
             </blockquote>
 
