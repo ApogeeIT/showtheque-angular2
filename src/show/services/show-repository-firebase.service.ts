@@ -1,3 +1,4 @@
+import { LocalStorageService } from '../../common/services/local-storage.service';
 import { AuthService } from '../../common/services/auth.service';
 import { ShowRepositoryService } from './show-repository.service';
 import { Injectable } from '@angular/core';
@@ -14,11 +15,11 @@ import { Show } from '../models/show'
 @Injectable()
 export class ShowRepositoryFirebaseService extends ShowRepositoryService {
 
-    private _shows: Show[] = [];
+    private _shows: Show[] | undefined = undefined;
 
     private userRef: firebase.database.Reference;
 
-    constructor(private _http: Http, private _auth: AuthService) {
+    constructor(private _http: Http, private _auth: AuthService, private _storage: LocalStorageService) {
         super();
         this._auth.onAuthenticatedChange().subscribe(auth => {
             if (auth) {
@@ -32,16 +33,34 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
 
     public getShows(): Observable<Show[]> {
         return new Observable<Show[]>((observer: Observer<Show[]>) => {
+
+            // in memory
+            if(this._shows !== undefined) {
+                observer.next(this._shows.slice());
+            }
+
             this.userRef.child('/shows').once('value').then((snapshot: firebase.database.DataSnapshot) => {
-                this._shows = [];
+                let shows = [];
 
                 snapshot.forEach((child: firebase.database.DataSnapshot) => {
-                    this._shows.push(child.val())
+                    shows.push(child.val())
                     return false;
                 });
-
-                observer.next(this._shows);
+                if(this._shows === undefined){
+                    observer.next(shows.slice());
+                }
+                this._shows=shows;
+                this.updateStorage();
+                
             }, err => {
+                // dans le storage
+                if(this._shows === undefined){
+                    let shows = this._storage.getData<Show[]>('shows');
+                    if(shows) {
+                        this._shows = shows;
+                        observer.next(this._shows);
+                    }
+                }
                 observer.error(err);
             });
 
@@ -56,9 +75,12 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
                 if (err) {
                     reject(err)
                 } else {
-                    let idx = this._shows.findIndex(s => s.id == id);
-                    if (idx >= 0) {
-                        this._shows.splice(idx, 1);
+                    if(this._shows) {
+                        let idx = this._shows.findIndex(s => s.id == id);
+                        if (idx >= 0) {
+                            this._shows.splice(idx, 1);
+                            this.updateStorage();
+                        }
                     }
                     resolve();
                 }
@@ -69,10 +91,13 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
 
     public getShow(id: string): Promise<Show> {
         return new Promise((resolve, reject) => {
-            console.log(id);
             this.getShows().subscribe(
-                shows => resolve(shows.find(s => s.id === id)),
-                err => reject(err))
+                shows => {
+                    resolve(shows.find(s => s.id === id));
+                },
+                err => {
+                    reject(err);
+                })
         });
     }
 
@@ -93,6 +118,7 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
                         this._shows.push(show);
                     }
                     resolve(show);
+                    this.updateStorage();
                 }
             });
         });
@@ -106,12 +132,16 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
     private getId(): string {
         return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, (c: any) =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4)
-            .toString(16)
+                .toString(16)
         );
     }
 
     private getUserRef() {
         return firebase.database().ref('/users/' + this._auth.login)
+    }
+
+    private updateStorage(){
+        this._storage.saveData('shows', this._shows)
     }
 
 }

@@ -17,6 +17,7 @@ import { ShowModule } from './show/show.module';
 
 import { AppComponent } from './app.component';
 import { ShowRepositoryFirebaseService } from './show/services/show-repository-firebase.service';
+import { LocalStorageService } from './common/services/local-storage.service';
 
 export function initAppFactory(init: InitAppService) {
     return function () {
@@ -42,7 +43,8 @@ let appRoutes: Routes = [
         { provide: AuthService, useClass: AuthFirebaseService },
         //{ provide: ShowRepositoryService, useClass: ShowRepositoryLocalService },
         //{ provide: AuthService, useClass: AuthLocalService },
-        MessageService
+        MessageService,
+        LocalStorageService
     ],
     bootstrap: [AppComponent]
 })
