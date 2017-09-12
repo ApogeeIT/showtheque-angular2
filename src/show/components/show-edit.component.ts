@@ -19,6 +19,7 @@ import { BaseDecorator } from '../../common/components/base-decorator.component'
 export class ShowEditComponent implements OnInit {
 
     show: Show;
+    loading = false;
 
     constructor(private _showRepo: ShowRepositoryService,
         private _route: ActivatedRoute,
@@ -42,12 +43,17 @@ export class ShowEditComponent implements OnInit {
 
     saveShow(showForm: NgForm) {
         if (showForm.valid) {
+            this.loading = true;
             this._showRepo.saveShow(this.show).then(
                 () => {
+                    this.loading = false;
                     this._msgService.showSuccessMessage('Saved')
                     this._router.navigate(['/shows']);
                 },
-                () => this._msgService.showErrorMessage('Error !')
+                () => {
+                    this.loading = false;
+                    this._msgService.showErrorMessage('Error !')
+                }
             );
         }
     }

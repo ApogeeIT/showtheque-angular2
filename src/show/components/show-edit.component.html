@@ -1,6 +1,7 @@
 <div class="row">
     <div class="column">
-        <h1>Shows <small>Edit #{{show ? show.id : ''}}</small></h1>
+        <h1>Shows <small>Edit</small></h1>
+        {{show ? show.id : ''}}
     </div>
 </div>
 
@@ -61,8 +62,10 @@
     <div class="row">
         <div class="column">
             <hr />
-            <input type="submit" class="button success large" value="Save" [disabled]="!showForm.form.valid" />
-            <a class="button secondary large" routerLink="/shows">Cancel</a>
+            <button type="submit" class="button success large"  [disabled]="!showForm.form.valid || loading" >
+                <i *ngIf="loading" class="fa fa-spinner fa-spin"></i> Save
+            </button>
+            <a class="button secondary large" routerLink="/shows">Cancel</a>            
         </div>
     </div>
 

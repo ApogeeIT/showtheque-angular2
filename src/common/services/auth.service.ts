@@ -1,5 +1,5 @@
 import { User } from '../model/user';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -11,9 +11,9 @@ export abstract class AuthService {
         return this._user;
     }
 
-    protected _isAuthenticated: Subject<boolean>;
+    protected _isAuthenticated: BehaviorSubject<boolean | undefined> = new BehaviorSubject(undefined);
 
-    public onAuthenticatedChange(): Subject<boolean> {
+    public onAuthenticatedChange(): BehaviorSubject<boolean | undefined> {
         return this._isAuthenticated;
     }
 

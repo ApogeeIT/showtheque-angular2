@@ -1,6 +1,5 @@
 import { AuthService } from './auth.service';
 import { User } from '../model/user';
-import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
 
@@ -9,7 +8,7 @@ export class AuthLocalService extends AuthService {
 
     constructor() {
         super();
-        this._isAuthenticated = new Subject();
+        this._isAuthenticated = new BehaviorSubject(undefined);
         this.localLogin();
     }
 

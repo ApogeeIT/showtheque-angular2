@@ -16,6 +16,10 @@ let showRoutes: Routes = [
         component: ShowListComponent
     },
     {
+        path: 'show',
+        component: ShowEditComponent
+    },
+    {
         path: 'show/:id',
         component: ShowEditComponent
     }
@@ -24,6 +28,6 @@ let showRoutes: Routes = [
 @NgModule({
     imports: [CommonModule, FormsModule, RouterModule.forChild(showRoutes)],
     declarations: [ShowListComponent, ShowEditComponent, EpisodeComponent, ProgressPipe],
-    providers: [ ]
+    providers: []
 })
 export class ShowModule { }

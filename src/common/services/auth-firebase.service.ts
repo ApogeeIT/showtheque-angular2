@@ -12,7 +12,7 @@ export class AuthFirebaseService extends AuthService {
 
     constructor() {
         super();
-        this._isAuthenticated = new Subject();
+        this._isAuthenticated = new BehaviorSubject(undefined);
 
         firebase.auth().onAuthStateChanged((user: firebase.UserInfo) => {
             this._fuser = user;
