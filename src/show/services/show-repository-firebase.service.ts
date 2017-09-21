@@ -1,3 +1,4 @@
+import { User } from '../../common/model/user';
 import { LocalStorageService } from '../../common/services/local-storage.service';
 import { AuthService } from '../../common/services/auth.service';
 import { ShowRepositoryService } from './show-repository.service';
@@ -15,10 +16,11 @@ import { Show } from '../models/show'
 @Injectable()
 export class ShowRepositoryFirebaseService extends ShowRepositoryService {
 
-    private _shows: Show[] = [];
-    private _isAuth = false;
+    private _shows?: Show[] = undefined;
+    private _db: any;
 
     private userRef: firebase.database.Reference;
+    private userId: string;
 
     constructor(private _http: Http, private _auth: AuthService, private _storage: LocalStorageService) {
         super();
@@ -27,56 +29,59 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
             if (auth) {
                 let user = this._auth.getUser();
                 if (user) {
+                    this.userId = user.id;
                     this.userRef = firebase.database().ref('/users/' + user.id);
-                    this._isAuth = true;
-                    this.getShows().subscribe();
+                    this._shows = this._storage.getData<Show[]>('shows_' + user.id) || undefined;
+                } else {
+                    this.unload();
                 }
+            } else {
+                this.unload();
             }
         });
+    }
+
+    private unload() {
+        this._shows = undefined;
     }
 
     public getShows(): Observable<Show[]> {
         return new Observable<Show[]>((observer: Observer<Show[]>) => {
-            if (!this._isAuth) {
+
+            if (this._shows !== undefined) {
                 observer.next(this._shows);
-            } else {
-
-                // in memory
-                /*if (this._shows !== undefined) {
-                    observer.next(this._shows);
-                }*/
-
-                this.userRef.child('/shows').once('value').then((snapshot: firebase.database.DataSnapshot) => {
-
-                    this._shows.splice(0, this._shows.length);
-
-                    snapshot.forEach((child: firebase.database.DataSnapshot) => {
-                        this._shows.push(child.val())
-                        return false;
-                    });
-
-                    observer.next(this._shows);
-                    this.updateStorage();
-
-                }, err => {
-                    // dans le storage
-                    if (this._shows === undefined) {
-                        let shows = this._storage.getData<Show[]>('shows');
-                        if (shows) {
-                            this._shows = shows;
-                            observer.next(this._shows);
-                        }
-                    }
-                    observer.error(err);
-                });
             }
+
+            this.userRef.child('/shows').once('value').then((snapshot: firebase.database.DataSnapshot) => {
+
+                let shows: Show[] = [];
+
+                snapshot.forEach((child: firebase.database.DataSnapshot) => {
+                    shows.push(child.val())
+                    return false;
+                });
+
+                if (this._shows === undefined) {
+                    this._shows = shows;
+                    observer.next(this._shows);
+                } else {
+                    this._shows.splice(0, this._shows.length, ...shows);
+                }
+
+                this.updateStorage();
+
+            }, err => {
+                if (this._shows === undefined) {
+                    observer.error(err); // load error
+                } else {
+                    observer.error(err); // refresh error
+                }
+            });
         });
     }
 
     public deleteShow(id: string): Promise<any> {
-
         return new Promise((resolve, reject) => {
-
             this.userRef.child('/shows/' + id).remove((err) => {
                 if (err) {
                     reject(err)
@@ -91,7 +96,6 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
                     resolve();
                 }
             });
-
         });
     }
 
@@ -103,7 +107,7 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
                 },
                 err => {
                     reject(err);
-                })
+                });
         });
     }
 
@@ -117,15 +121,14 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
             }
 
             this.userRef.child('/shows/' + show.id).set(show, (err) => {
-                console.log(err)
                 if (err) {
                     reject();
                 } else {
                     if (add && this._shows !== undefined) {
                         this._shows.push(show);
                     }
-                    resolve(show);
                     this.updateStorage();
+                    resolve(show);
                 }
             });
         });
@@ -143,12 +146,10 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
         );
     }
 
-    private getUserRef() {
-        return firebase.database().ref('/users/' + this._auth.login)
-    }
-
     private updateStorage() {
-        this._storage.saveData('shows', this._shows)
+        if (this._shows !== undefined) {
+            this._storage.saveData('shows_' + this.userId, this._shows)
+        }
     }
 
 }

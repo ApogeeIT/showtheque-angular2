@@ -5,4 +5,5 @@ export class Show {
     title:string;
     year:number;
     seasons:Season[];
+    sync:boolean;
 }

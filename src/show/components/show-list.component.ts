@@ -17,19 +17,20 @@ export class ShowListComponent implements OnInit {
     shows: Show[];
 
     constructor(private _showRepo: ShowRepositoryService,
-                private _msgService: MessageService){
+        private _msgService: MessageService) {
 
     }
 
-
-    ngOnInit(){
-        this._showRepo.getShows().subscribe((shows:Show[]) => this.shows=shows );
+    ngOnInit() {
+        this._showRepo.getShows().subscribe(
+            (shows: Show[]) => this.shows = shows,
+            (err) => this._msgService.showErrorMessage('Error'));
     }
 
-    deleteShow(id:number) {
+    deleteShow(id: number) {
         this._showRepo.deleteShow(id).then(
             () => this._msgService.showSuccessMessage('Item deleted'),
-            () => this._msgService.showErrorMessage('Error !')
+            (err) => this._msgService.showErrorMessage('Error')
         );
     }
 

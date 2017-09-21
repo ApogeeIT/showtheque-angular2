@@ -1,6 +1,6 @@
 <div id="main">
     <div id="top">
-        <div id="header-right">
+        <div id="header-right" *ngIf="init">
             <a routerLink="/home" class="button primary large">Home</a>
             <a *ngIf="user" routerLink="/shows" class="button primary large">Shows</a>
         </div>
