@@ -116,6 +116,7 @@ gulp.task('dist-vendor', ['dist-compile'], function () {
         'node_modules/toastr/build/toastr.min.js',
         'node_modules/core-js/client/shim.min.js',
         'node_modules/zone.js/dist/zone.min.js',
+        'node_modules/firebase/firebase.js'
         //'node_modules/reflect-metadata/Reflect.js',
         //'node_modules/systemjs/dist/system.js'
     ];
@@ -158,17 +159,25 @@ gulp.task('dist-app-bundle', function (cb) {
             ]
         }))*/
     return rollup({
-        entry:'app/src/main-aot.js',
-            sourceMap: false,
-            format: 'iife',
-            plugins: [
-                nodeResolve({ jsnext: true, module: true }),
-                commonjs({
-                    include: 'node_modules/rxjs/**',
-                }),
-                uglify()
-            ]
-        })
+        input: 'app/src/main-aot.js',
+        sourcemap: false,
+        format: 'iife',
+        onwarn: function (warning) {
+            if (warning.code === 'THIS_IS_UNDEFINED') { return; }
+            console.warn(warning.message);
+        },
+        globals: {
+            firebase: 'firebase'
+        },
+        external: ['firebase'],
+        plugins: [
+            nodeResolve({ jsnext: true, module: true }),
+            commonjs({
+                include: 'node_modules/rxjs/**',
+            }),
+            uglify()
+        ]
+    })
         .pipe(source('app.js'))
         .pipe($.streamify($.rev()))
         .pipe(gulp.dest('dist/'));

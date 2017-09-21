@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import 'firebase';
+
+import * as firebase from 'firebase';
 
 @Injectable()
 export class InitAppService {

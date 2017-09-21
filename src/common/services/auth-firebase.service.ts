@@ -3,7 +3,8 @@ import { User } from '../model/user';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
-import 'firebase';
+
+import * as firebase from 'firebase';
 
 @Injectable()
 export class AuthFirebaseService extends AuthService {
