@@ -5,7 +5,6 @@ import uglify from 'rollup-plugin-uglify'
 export default {
     input: 'src/main-aot.js',
     sourcemap: false,
-    sourcemapFile: 'dist/app.js.map',
     output: {
         format: 'iife',
         file: 'dist/app.js'
@@ -14,10 +13,10 @@ export default {
         if (warning.code === 'THIS_IS_UNDEFINED') { return; }
         console.warn(warning.message);
     },
-    globals: {
+    /*globals: {
         firebase: 'firebase'
     },
-    external: ['firebase'],
+    external: ['firebase'],*/
     plugins: [
         nodeResolve({
             jsnext: true,
@@ -25,7 +24,7 @@ export default {
             browser: true
         }),
         commonjs({
-            include: 'node_modules/rxjs/**',
+            include: ['node_modules/rxjs/**', 'node_modules/@firebase/**']
         }),
         uglify()
     ]
