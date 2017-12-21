@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { Show } from '../models/show'
+import { Show } from '../models/show';
 
 @Injectable()
 export abstract class ShowRepositoryService {

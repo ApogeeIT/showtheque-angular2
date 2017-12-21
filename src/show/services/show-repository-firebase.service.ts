@@ -1,35 +1,30 @@
-import { User } from '../../common/model/user';
-import { LocalStorageService } from '../../common/services/local-storage.service';
-import { AuthService } from '../../common/services/auth.service';
-import { ShowRepositoryService } from './show-repository.service';
-import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import '@firebase/database';
 
+import { Injectable } from '@angular/core';
+import { firebase } from '@firebase/app';
+import { DataSnapshot, Reference } from '@firebase/database-types';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-
-import { Show } from '../models/show'
-
-import * as firebase from 'firebase';
+import { AuthService } from '../../common/services/auth.service';
+import { LocalStorageService } from '../../common/services/local-storage.service';
+import { Show } from '../models/show';
+import { ShowRepositoryService } from './show-repository.service';
 
 @Injectable()
 export class ShowRepositoryFirebaseService extends ShowRepositoryService {
 
     private _shows?: Show[] = undefined;
-    private _db: any;
 
-    private userRef: firebase.database.Reference;
+    private userRef: Reference;
     private userId: string;
 
-    constructor(private _http: Http, private _auth: AuthService, private _storage: LocalStorageService) {
+    constructor(private _auth: AuthService, private _storage: LocalStorageService) {
         super();
 
         this._auth.onAuthenticatedChange().subscribe(auth => {
             if (auth) {
-                let user = this._auth.getUser();
+                const user = this._auth.getUser();
                 if (user) {
                     this.userId = user.id;
                     this.userRef = firebase.database().ref('/users/' + user.id);
@@ -54,12 +49,12 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
                 observer.next(this._shows);
             }
 
-            this.userRef.child('/shows').once('value').then((snapshot: firebase.database.DataSnapshot) => {
+            this.userRef.child('/shows').once('value').then((snapshot: DataSnapshot) => {
 
-                let shows: Show[] = [];
+                const shows: Show[] = [];
 
-                snapshot.forEach((child: firebase.database.DataSnapshot) => {
-                    shows.push(child.val())
+                snapshot.forEach((child: DataSnapshot) => {
+                    shows.push(child.val());
                     return false;
                 });
 
@@ -86,10 +81,10 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
         return new Promise((resolve, reject) => {
             this.userRef.child('/shows/' + id).remove((err) => {
                 if (err) {
-                    reject(err)
+                    reject(err);
                 } else {
                     if (this._shows) {
-                        let idx = this._shows.findIndex(s => s.id == id);
+                        const idx = this._shows.findIndex(s => s.id === id);
                         if (idx >= 0) {
                             this._shows.splice(idx, 1);
                             this.updateStorage();
@@ -136,21 +131,17 @@ export class ShowRepositoryFirebaseService extends ShowRepositoryService {
         });
     }
 
-    private error(error: Response) {
-        console.log(error);
-        return Observable.throw("Request error");
-    }
-
     private getId(): string {
         return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, (c: any) => {
-            let a:any = crypto.getRandomValues(new Uint8Array(1));
+            const a: any = crypto.getRandomValues(new Uint8Array(1));
+            // tslint:disable-next-line:no-bitwise
             return (c ^ a[0] & 15 >> c / 4).toString(16);
         });
     }
 
     private updateStorage() {
         if (this._shows !== undefined) {
-            this._storage.saveData('shows_' + this.userId, this._shows)
+            this._storage.saveData('shows_' + this.userId, this._shows);
         }
     }
 

@@ -6,8 +6,8 @@ import { Show } from '../models/show';
     name: 'staProgress'
 })
 export class ProgressPipe implements PipeTransform {
-    transform(show: Show):string {
-        let episodes = !show.seasons ? [] :
+    transform(show: Show): string {
+        const episodes = !show.seasons ? [] :
             show.seasons.filter(s => s.episodes).map(s => s.episodes)
                 .reduce((a, b) => [...a, ...b], []);
 

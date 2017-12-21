@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ShowRepositoryService } from '../services/show-repository.service';
 import { MessageService } from '../../common/services/message.service';
-
 import { Show } from '../models/show';
-
-import { BaseDecorator } from '../../common/components/base-decorator.component';
+import { ShowRepositoryService } from '../services/show-repository.service';
 
 @Component({
     moduleId: module.id,

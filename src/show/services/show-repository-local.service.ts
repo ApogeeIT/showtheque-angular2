@@ -1,14 +1,13 @@
-import { ShowRepositoryService } from './show-repository.service';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-
-import { Show } from '../models/show'
+import { Show } from '../models/show';
+import { ShowRepositoryService } from './show-repository.service';
 
 @Injectable()
 export class ShowRepositoryLocalService extends ShowRepositoryService {
@@ -21,7 +20,7 @@ export class ShowRepositoryLocalService extends ShowRepositoryService {
 
     public getShows(): Observable<Show[]> {
 
-        var obs = new Observable<Show[]>((observer: Observer<Show[]>) => {
+        const obs = new Observable<Show[]>((observer: Observer<Show[]>) => {
 
             if (this._shows) {
                 observer.next(this._shows);
@@ -43,10 +42,10 @@ export class ShowRepositoryLocalService extends ShowRepositoryService {
 
     public deleteShow(id: number): Promise<any> {
 
-        let promise = new Promise((resolve, reject) => {
+        const promise = new Promise((resolve, reject) => {
 
             this.getShows().subscribe((shows: Show[]) => {
-                let idx = shows.findIndex(s => s.id == id);
+                const idx = shows.findIndex(s => s.id == id);
                 let show: Show; // tslint
                 if (idx >= 0) {
                     show = shows[idx];
@@ -67,7 +66,7 @@ export class ShowRepositoryLocalService extends ShowRepositoryService {
         return new Promise((resolve, reject) => {
             this.getShows().subscribe(
                 shows => resolve(shows.find(s => s.id == id)),
-                err => reject(err))
+                err => reject(err));
         });
     }
 
@@ -77,21 +76,21 @@ export class ShowRepositoryLocalService extends ShowRepositoryService {
             this.getShows().subscribe(shows => {
 
                 if (show.id) {
-                    let idx = shows.findIndex(s => s.id == show.id);
+                    const idx = shows.findIndex(s => s.id == show.id);
                     shows.splice(idx, 1, show);
                 } else {
-                    show.id = shows.reduce<any>((a, b) => { return { id: Math.max(a.id, +b.id) } }, { id: 0 }).id + 1;
+                    show.id = shows.reduce<any>((a, b) => ({ id: Math.max(a.id, +b.id) }), { id: 0 }).id + 1;
                     shows.push(show);
                 }
                 resolve(show);
-            }, err => reject(err))
+            }, err => reject(err));
 
         });
     }
 
     private error(error: Response) {
         console.log(error);
-        return Observable.throw("Request error");
+        return Observable.throw('Request error');
     }
 
 }

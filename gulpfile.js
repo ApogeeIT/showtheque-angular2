@@ -11,6 +11,8 @@ var nodeResolve = require('rollup-plugin-node-resolve'),
     source = require('vinyl-source-stream'),
     uglify = require('rollup-plugin-uglify');
 
+var ngc = require('@angular/compiler-cli/src/main').main;
+
 gulp.task('foundation-style', ['font-awesome-fonts'], function () {
 
     return gulp.src('scss/app.scss')
@@ -143,37 +145,28 @@ gulp.task('dist-vendor', ['dist-compile'], function () {
         .pipe(gulp.dest('dist/'));
 });*/
 
+gulp.task('dist-app-build', function () {
+    return ngc(['-p', 'tsconfig-aot.json']);
+});
 
-gulp.task('dist-app-bundle', function (cb) {
-    /*return gulp.src('app/src/main-aot.js')
-        .pipe($.rollup({
-            entry:'app/src/main-aot.js',
-            allowRealFiles: true,
-            sourceMap: false,
-            format: 'iife',
-            plugins: [
-                nodeResolve({ jsnext: true, module: true }),
-                commonjs({
-                    include: 'node_modules/rxjs/**',
-                })
-            ]
-        }))*/
+gulp.task('dist-app-bundle', ['dist-app-build'], function () {
+
     return rollup({
-        input: 'app/src/main-aot.js',
+        input: 'src/main-aot.js',
         sourcemap: false,
         format: 'iife',
         onwarn: function (warning) {
             if (warning.code === 'THIS_IS_UNDEFINED') { return; }
             console.warn(warning.message);
         },
-        globals: {
+        /*globals: {
             firebase: 'firebase'
         },
-        external: ['firebase'],
+        external: ['firebase'],*/
         plugins: [
             nodeResolve({ jsnext: true, module: true }),
             commonjs({
-                include: 'node_modules/rxjs/**',
+                include: ['node_modules/rxjs/**', 'node_modules/@firebase/**']
             }),
             uglify()
         ]

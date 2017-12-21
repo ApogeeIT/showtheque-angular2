@@ -1,15 +1,12 @@
-import { NgForm } from '@angular/forms/src/directives';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
+import { NgForm } from '@angular/forms/src/directives';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
-import { ShowRepositoryService } from '../services/show-repository.service';
 import { MessageService } from '../../common/services/message.service';
-
-import { Show } from '../models/show';
-import { Season } from '../models/season';
 import { Episode } from '../models/episode';
-
-import { BaseDecorator } from '../../common/components/base-decorator.component';
+import { Season } from '../models/season';
+import { Show } from '../models/show';
+import { ShowRepositoryService } from '../services/show-repository.service';
 
 @Component({
     moduleId: module.id,
@@ -30,7 +27,7 @@ export class ShowEditComponent implements OnInit {
 
     ngOnInit() {
         this._route.params.forEach((params: Params) => {
-            let id = params['id'];
+            const id = params['id'];
             if (id) {
                 this._showRepo.getShow(id).then(
                     s => this.show = s
@@ -47,12 +44,12 @@ export class ShowEditComponent implements OnInit {
             this._showRepo.saveShow(this.show).then(
                 () => {
                     this.loading = false;
-                    this._msgService.showSuccessMessage('Saved')
+                    this._msgService.showSuccessMessage('Saved');
                     this._router.navigate(['/shows']);
                 },
                 () => {
                     this.loading = false;
-                    this._msgService.showErrorMessage('Error !')
+                    this._msgService.showErrorMessage('Error !');
                 }
             );
         }

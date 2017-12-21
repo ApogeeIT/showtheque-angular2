@@ -1,9 +1,9 @@
-export class Episode{
+export class Episode {
 
-    constructor(number:number){
+    constructor(number: number) {
         this.number = number;
     }
 
-    number:number;
-    view:boolean;
+    number: number;
+    view: boolean;
 }

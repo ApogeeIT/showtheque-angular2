@@ -1,16 +1,14 @@
-import { ShowRepositoryLocalService } from './services/show-repository-local.service';
-import { ShowRepositoryFirebaseService } from './services/show-repository-firebase.service';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
-import { ShowRepositoryService } from './services/show-repository.service';
-import { ShowListComponent } from './components/show-list.component';
+import { RouterModule, Routes } from '@angular/router';
+
 import { ShowEditComponent } from './components/show-edit.component';
+import { ShowListComponent } from './components/show-list.component';
 import { EpisodeComponent } from './directives/episode.directive';
 import { ProgressPipe } from './pipes/progress.pipe';
 
-let showRoutes: Routes = [
+const showRoutes: Routes = [
     {
         path: 'shows',
         component: ShowListComponent

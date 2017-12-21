@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import * as firebase from 'firebase';
+import { UserInfo } from '@firebase/auth-types';
+import { firebase } from '@firebase/app';
+import '@firebase/auth';
 
 @Injectable()
 export class InitAppService {
@@ -9,12 +11,11 @@ export class InitAppService {
 
     public initApplication(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            let config = {
-
+            const config = {
             };
             try {
                 firebase.initializeApp(config);
-                let unsubscribe = firebase.auth().onAuthStateChanged((user: firebase.UserInfo) => {
+                const unsubscribe = firebase.auth().onAuthStateChanged((user: UserInfo) => {
                     this._init = true;
                     resolve();
                     unsubscribe();

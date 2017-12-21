@@ -3,7 +3,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import uglify from 'rollup-plugin-uglify'
 
 export default {
-    input: 'app/src/main-aot.js',
+    input: 'src/main-aot.js',
     sourcemap: false,
     sourcemapFile: 'dist/app.js.map',
     output: {

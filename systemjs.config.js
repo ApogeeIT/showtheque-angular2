@@ -20,8 +20,12 @@
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
       // other libraries
-      'rxjs':     'npm:rxjs',
-      'firebase': 'npm:firebase/firebase.js',
+      'rxjs': 'npm:rxjs',
+      //'firebase': 'npm:firebase',
+      '@firebase/app': 'npm:@firebase/app/dist/cjs/',
+      '@firebase/auth': 'npm:@firebase/auth/dist/auth.js',
+      '@firebase/util': 'npm:@firebase/util/dist/cjs/',
+      '@firebase/database': 'npm:@firebase/database/dist/cjs/',
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -30,6 +34,18 @@
         defaultExtension: 'js'
       },
       rxjs: {
+        defaultExtension: 'js'
+      },
+      '@firebase/app': {
+        main: 'index',
+        defaultExtension: 'js'
+      },
+      '@firebase/util': {
+        main: 'index',
+        defaultExtension: 'js'
+      },
+      '@firebase/database': {
+        main: 'index',
         defaultExtension: 'js'
       }
     }

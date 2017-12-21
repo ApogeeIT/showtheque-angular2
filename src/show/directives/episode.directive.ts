@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 
-
 import { Episode } from '../models/episode';
 
 @Component({
@@ -10,7 +9,6 @@ import { Episode } from '../models/episode';
 })
 export class EpisodeComponent {
 
-    @Input()
-    episode:Episode;
+    @Input() episode: Episode;
 
 }
