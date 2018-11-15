@@ -1,10 +1,9 @@
 import nodeResolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs';
-import uglify from 'rollup-plugin-uglify'
+import { uglify } from "rollup-plugin-uglify";
 
 export default {
     input: 'src/main-aot.js',
-    sourcemap: false,
     output: {
         format: 'iife',
         file: 'dist/app.js'
@@ -26,6 +25,6 @@ export default {
         commonjs({
             include: ['node_modules/rxjs/**', 'node_modules/@firebase/**']
         }),
-        uglify()
+        uglify({ sourcemap: false })
     ]
 }

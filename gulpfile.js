@@ -9,7 +9,7 @@ var nodeResolve = require('rollup-plugin-node-resolve'),
     commonjs = require('rollup-plugin-commonjs'),
     rollup = require('rollup-stream'),
     source = require('vinyl-source-stream'),
-    uglify = require('rollup-plugin-uglify');
+    uglify = require('rollup-plugin-uglify').uglify;
 
 var ngc = require('@angular/compiler-cli/src/main').main;
 
@@ -153,7 +153,6 @@ gulp.task('dist-app-bundle', ['dist-app-build'], function () {
 
     return rollup({
         input: 'src/main-aot.js',
-        sourcemap: false,
         format: 'iife',
         onwarn: function (warning) {
             if (warning.code === 'THIS_IS_UNDEFINED') { return; }
@@ -164,11 +163,15 @@ gulp.task('dist-app-bundle', ['dist-app-build'], function () {
         },
         external: ['firebase'],*/
         plugins: [
-            nodeResolve({ jsnext: true, module: true }),
+            nodeResolve({
+                jsnext: true,
+                module: true,
+                browser: true
+            }),
             commonjs({
                 include: ['node_modules/rxjs/**', 'node_modules/@firebase/**']
             }),
-            uglify()
+            uglify({ sourcemap: false })
         ]
     })
         .pipe(source('app.js'))
