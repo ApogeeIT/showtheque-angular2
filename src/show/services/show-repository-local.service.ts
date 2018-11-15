@@ -1,10 +1,8 @@
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+import { Observable } from 'rxjs';
+import { Observer } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { Show } from '../models/show';
 import { ShowRepositoryService } from './show-repository.service';
@@ -25,10 +23,10 @@ export class ShowRepositoryLocalService extends ShowRepositoryService {
             if (this._shows) {
                 observer.next(this._shows);
             } else {
-                this._http.get('api/shows.js')
-                    .map((res: Response) => <Show[]>res.json().entities)
-                    .catch(this.error)
-                    .subscribe(shows => {
+                this._http.get('api/shows.js').pipe(
+                    map((res: Response) => <Show[]>res.json().entities),
+                    catchError(this.error)
+                    ).subscribe(shows => {
                         this._shows = shows;
                         observer.next(this._shows);
                     });

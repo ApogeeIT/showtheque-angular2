@@ -1,3 +1,16 @@
+/*
+
+map: { 'rxjs': path.join(__dirname, '..', '..', 'dist', 'package', '/') },
+  packages: {
+    'rxjs': {main: 'index.js', defaultExtension: 'js' },
+    'rxjs/ajax': {main: 'index.js', defaultExtension: 'js' },
+    'rxjs/operators': {main: 'index.js', defaultExtension: 'js' },
+    'rxjs/testing': {main: 'index.js', defaultExtension: 'js' },
+    'rxjs/webSocket': {main: 'index.js', defaultExtension: 'js' }
+}
+*/
+
+
 (function (global) {
   var config = {
     paths: {
@@ -21,11 +34,15 @@
 
       // other libraries
       'rxjs': 'npm:rxjs',
+      'rxjs/operators': 'npm:rxjs/operators',
+      'tslib': 'npm:tslib/tslib.js',
+
       //'firebase': 'npm:firebase',
-      '@firebase/app': 'npm:@firebase/app/dist/cjs/',
+      '@firebase/app': 'npm:@firebase/app/dist/',
       '@firebase/auth': 'npm:@firebase/auth/dist/auth.js',
-      '@firebase/util': 'npm:@firebase/util/dist/cjs/',
-      '@firebase/database': 'npm:@firebase/database/dist/cjs/',
+      '@firebase/util': 'npm:@firebase/util/dist/',
+      '@firebase/database': 'npm:@firebase/database/dist/',
+      '@firebase/logger': 'npm:@firebase/logger/dist/',
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -33,19 +50,22 @@
         main: './main',
         defaultExtension: 'js'
       },
-      rxjs: {
-        defaultExtension: 'js'
-      },
+      'rxjs/operators': {main: 'index.js', defaultExtension: 'js' },
+      'rxjs': { main: 'index.js', defaultExtension: 'js' },
       '@firebase/app': {
-        main: 'index',
+        main: 'index.cjs',
         defaultExtension: 'js'
       },
       '@firebase/util': {
-        main: 'index',
+        main: 'index.cjs',
         defaultExtension: 'js'
       },
       '@firebase/database': {
-        main: 'index',
+        main: 'index.cjs',
+        defaultExtension: 'js'
+      },
+      '@firebase/logger': {
+        main: 'index.cjs',
         defaultExtension: 'js'
       }
     }

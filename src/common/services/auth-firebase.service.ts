@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import '@firebase/auth';
 import { firebase } from '@firebase/app';
-import { UserInfo } from '@firebase/auth-types';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { UserInfo, UserCredential } from '@firebase/auth-types';
+import { BehaviorSubject } from 'rxjs';
 
 import { AuthService } from './auth.service';
 
@@ -27,8 +28,8 @@ export class AuthFirebaseService extends AuthService {
 
     login(login: string, passsword: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            firebase.auth().signInWithEmailAndPassword(login, passsword).then((user: UserInfo) => {
-                resolve(user);
+            firebase.auth().signInWithEmailAndPassword(login, passsword).then((user: UserCredential) => {
+                resolve(user.user);
             }, err => {
                 reject(err);
             });

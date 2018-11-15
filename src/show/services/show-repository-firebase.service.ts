@@ -3,8 +3,8 @@ import '@firebase/database';
 import { Injectable } from '@angular/core';
 import { firebase } from '@firebase/app';
 import { DataSnapshot, Reference } from '@firebase/database-types';
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+import { Observable } from 'rxjs';
+import { Observer } from 'rxjs';
 
 import { AuthService } from '../../common/services/auth.service';
 import { LocalStorageService } from '../../common/services/local-storage.service';

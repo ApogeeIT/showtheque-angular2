@@ -12,6 +12,12 @@ export class InitAppService {
     public initApplication(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const config = {
+                apiKey: 'AIzaSyAyYahTPGf7dTpDqi3TwwohdzAvHvxkH2Q',
+                authDomain: 'showtheque.firebaseapp.com',
+                databaseURL: 'https://showtheque.firebaseio.com',
+                projectId: 'showtheque',
+                storageBucket: 'showtheque.appspot.com',
+                messagingSenderId: '596286926001'
             };
             try {
                 firebase.initializeApp(config);
