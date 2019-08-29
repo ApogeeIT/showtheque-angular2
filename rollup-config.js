@@ -18,8 +18,9 @@ export default {
     external: ['firebase'],*/
     plugins: [
         nodeResolve({
-            jsnext: true,
-            module: true,
+            mainFields:['module', 'jsnext:main'],
+            /*jsnext: true,
+            module: true,*/
             browser: true
         }),
         commonjs({
