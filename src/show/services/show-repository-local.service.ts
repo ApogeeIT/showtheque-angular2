@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Observer } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -12,7 +12,7 @@ export class ShowRepositoryLocalService extends ShowRepositoryService {
 
     private _shows: Show[];
 
-    constructor(private _http: Http) {
+    constructor(private _http: HttpClient) {
         super();
     }
 
@@ -23,13 +23,13 @@ export class ShowRepositoryLocalService extends ShowRepositoryService {
             if (this._shows) {
                 observer.next(this._shows);
             } else {
-                this._http.get('api/shows.js').pipe(
-                    map((res: Response) => <Show[]>res.json().entities),
+                this._http.get<{ entities: Show[] }>('api/shows.js').pipe(
+                    map((res: { entities: Show[] }) => res.entities),
                     catchError(this.error)
-                    ).subscribe(shows => {
-                        this._shows = shows;
-                        observer.next(this._shows);
-                    });
+                ).subscribe(shows => {
+                    this._shows = shows;
+                    observer.next(this._shows);
+                });
             }
 
         });

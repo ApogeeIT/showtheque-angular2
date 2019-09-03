@@ -1,6 +1,6 @@
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { Router, RouterModule, Routes } from '@angular/router';
 
@@ -14,6 +14,8 @@ import { HomeModule } from './home/home.module';
 import { ShowRepositoryFirebaseService } from './show/services/show-repository-firebase.service';
 import { ShowRepositoryService } from './show/services/show-repository.service';
 import { ShowModule } from './show/show.module';
+import { AuthLocalService } from './common/services/auth-local.service';
+import { ShowRepositoryLocalService } from './show/services/show-repository-local.service';
 
 export function initAppFactory(init: InitAppService, injector: Injector) {
     return () => new Promise<any>((resolve: any) => {
@@ -38,15 +40,15 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-    imports: [BrowserModule, HttpModule, HomeModule, ShowModule, RouterModule.forRoot(appRoutes)],
+    imports: [BrowserModule, HttpClientModule, HomeModule, ShowModule, RouterModule.forRoot(appRoutes)],
     declarations: [AppComponent],
     providers: [
         InitAppService,
-        { provide: APP_INITIALIZER, useFactory: initAppFactory, deps: [InitAppService, Injector], multi: true },
-        { provide: ShowRepositoryService, useClass: ShowRepositoryFirebaseService },
-        { provide: AuthService, useClass: AuthFirebaseService },
-        // { provide: ShowRepositoryService, useClass: ShowRepositoryLocalService },
-        // { provide: AuthService, useClass: AuthLocalService },
+        // { provide: APP_INITIALIZER, useFactory: initAppFactory, deps: [InitAppService, Injector], multi: true },
+        // { provide: ShowRepositoryService, useClass: ShowRepositoryFirebaseService },
+        // { provide: AuthService, useClass: AuthFirebaseService },
+        { provide: ShowRepositoryService, useClass: ShowRepositoryLocalService },
+        { provide: AuthService, useClass: AuthLocalService },
         MessageService,
         LocalStorageService
     ],
